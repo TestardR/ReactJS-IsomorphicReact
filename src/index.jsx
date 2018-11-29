@@ -6,6 +6,10 @@ import { Provider } from 'react-redux';
 
 const store = getStore();
 
+const fetchDataForLocation = () => {
+  store.dispatch({ type: `REQUEST_FETCH_QUESTIONS` });
+};
+
 const render = App => {
   ReactDOM.render(
     <Provider store={store}>
@@ -16,3 +20,4 @@ const render = App => {
 };
 
 render(App);
+fetchDataForLocation();
