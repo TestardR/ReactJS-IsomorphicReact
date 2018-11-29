@@ -10,8 +10,16 @@ const history = createHistory();
 
 const store = getStore(history);
 
-const fetchDataForLocation = () => {
-  store.dispatch({ type: `REQUEST_FETCH_QUESTIONS` });
+const fetchDataForLocation = location => {
+  if (location.pathname === '/') {
+    store.dispatch({ type: `REQUEST_FETCH_QUESTIONS` });
+  }
+  if (location.pathname.includes(`questions`)) {
+    store.dispatch({
+      type: `REQUEST_FETCH_QUESTION`,
+      question_id: location.pathname.split('/')[2]
+    });
+  }
 };
 
 const render = App => {
@@ -42,4 +50,5 @@ store.subscribe(() => {
     console.info('App not yet mounted');
   }
 });
-fetchDataForLocation();
+fetchDataForLocation(history.location);
+history.listen(fetchDataForLocation);
