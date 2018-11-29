@@ -4,16 +4,18 @@ import createSagaMiddlewae from 'redux-saga';
 import { createLogger } from 'redux-logger';
 import fetchQuestionsSaga from './sagas/fetch-questions.sagas';
 import * as reducers from './reducers';
+import { routerReducer as router, routerMiddleware } from 'react-router-redux';
 
-export default function(defaultState) {
+export default function(history, defaultState) {
   const sagaMiddleware = createSagaMiddlewae();
-  const middlewareChain = [sagaMiddleware];
+  const middleware = routerMiddleware(history);
+  const middlewareChain = [middleware, sagaMiddleware];
   if (process.env.NODE_ENV === 'development') {
     const logger = createLogger();
     middlewareChain.push(logger);
   }
   const store = createStore(
-    combineReducers({ ...reducers }),
+    combineReducers({ ...reducers, router }),
     defaultState,
     applyMiddleware(...middlewareChain)
   );
